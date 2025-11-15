@@ -1,326 +1,237 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with the Axiom System Archaeologist plugin.
 
 ## Repository Overview
 
-This is the **Skillpacks Marketplace** - a modular collection of 15 professional skillpacks providing 135 production-ready skills for Claude Code across AI/ML, Python engineering, game development, security, documentation, and UX design.
+This is the **Axiom System Archaeologist** - a Claude Code plugin for deep architectural analysis of existing codebases through autonomous subagent-driven exploration.
 
-**Status**: v1.2.0 - Production ready, CC BY-SA 4.0 licensed, publicly available
+**Purpose**: Systematically analyze codebases to generate C4 diagrams, subsystem catalogs, and architecture documentation
 
-## Architecture
-
-### Marketplace Structure
+## Plugin Structure
 
 ```plaintext
 skillpacks/
-├── .claude-plugin/
-│   └── marketplace.json          # Marketplace catalog defining all 15 plugins
-├── plugins/                       # 15 independent plugin directories
-│   ├── [plugin-name]/
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json       # Plugin metadata (name, version, description)
-│   │   └── skills/
-│   │       └── [skill-name]/
-│   │           └── SKILL.md      # Skill implementation
-└── docs/
-    └── future-*.md               # Future planning docs
+├── .claude/
+│   └── commands/
+│       └── system-archaeologist.md    # Slash command for easy invocation
+├── plugins/
+│   └── axiom-system-archaeologist/
+│       ├── .claude-plugin/
+│       │   └── plugin.json            # Plugin metadata
+│       └── skills/
+│           └── using-system-archaeologist/
+│               ├── SKILL.md           # Router skill (main entry point)
+│               ├── analyzing-unknown-codebases.md
+│               ├── generating-architecture-diagrams.md
+│               ├── documenting-system-architecture.md
+│               └── validating-architecture-analysis.md
 ```
 
-### Plugin Categories
+## Skills Overview
 
-1. **Python Engineering (Axiom faction)** - 2 plugins, 15 skills
-   - `axiom-python-engineering` (10 skills)
-   - `axiom-system-archaeologist` (5 skills - router + specialists)
+### 1. using-system-archaeologist (Router)
+**Main entry point** - Coordinates subagent-driven codebase analysis with mandatory workspace structure and validation gates.
 
-2. **AI/ML (Yzmir faction)** - 8 plugins, 70 skills
-   - `yzmir-ai-engineering-expert` (router)
-   - `yzmir-pytorch-engineering`
-   - `yzmir-training-optimization`
-   - `yzmir-deep-rl`
-   - `yzmir-neural-architectures`
-   - `yzmir-llm-specialist`
-   - `yzmir-ml-production`
-   - `yzmir-simulation-foundations`
+**Key Features:**
+- Mandatory workspace creation: `docs/arch-analysis-YYYY-MM-DD-HHMM/`
+- Coordination plan documentation
+- Quality validation gates
+- Pressure-resistant workflow
 
-3. **Game Development (Bravos faction)** - 2 plugins, 20 skills
-   - `bravos-simulation-tactics`
-   - `bravos-systems-as-experience`
+### 2. analyzing-unknown-codebases
+Systematic exploration strategies for unfamiliar codebases of any size.
 
-4. **UX Design (Lyra faction)** - 1 plugin, 11 skills
-   - `lyra-ux-designer`
+### 3. generating-architecture-diagrams
+C4 diagram generation (Context, Container, Component levels) in Mermaid format.
 
-5. **Security (Ordis faction)** - 1 plugin, 9 skills
-   - `ordis-security-architect`
+### 4. documenting-system-architecture
+Stakeholder-ready architecture documentation with ADRs.
 
-6. **Documentation (Muna faction)** - 1 plugin, 9 skills
-   - `muna-technical-writer`
+### 5. validating-architecture-analysis
+Quality gates and completeness checklists.
 
-### Slash Commands (Router Skills)
+## Installation & Usage
 
-**IMPORTANT**: All router skills (`using-X` skills) are available as slash commands in `.claude/commands/` due to skill context limits.
-
-To use a router skill, invoke it as a slash command:
-
-```
-/ai-engineering      # Routes to AI/ML skills
-/system-archaeologist # Routes to architecture analysis
-/deep-rl            # Routes to RL algorithms
-/python-engineering  # Routes to Python skills
-```
-
-**Why slash commands?** Router skills exceeded the context budget for skill discovery. Slash commands provide:
-- No context limits
-- Explicit user invocation
-- Faster loading
-- Better control flow
-
-See [.claude/SLASH_COMMANDS.md](.claude/SLASH_COMMANDS.md) for complete list of all 15 router commands.
-
-### Skill File Format
-
-Each `SKILL.md` follows this structure:
-
-- **Front matter**: YAML with `name` and `description`
-- **Content**: Expert-level guidance with examples, patterns, and anti-patterns
-- Skills range from 200-2000 lines of production-ready content
-
-### Router Patterns
-
-Several plugins use "using-X" router skills that direct users to appropriate specialized skills. **These are now available as slash commands** (see Slash Commands section above):
-
-- `axiom-system-archaeologist/using-system-archaeologist/SKILL.md` → `/system-archaeologist` - Routes to architecture analysis specialists
-- `yzmir-ai-engineering-expert/using-ai-engineering/SKILL.md` → `/ai-engineering` - Routes to all AI/ML packs
-- `yzmir-deep-rl/using-deep-rl/SKILL.md` → `/deep-rl` - Routes to 12 RL algorithm skills
-- Similar routers exist for all 15 plugins (see `.claude/SLASH_COMMANDS.md` for complete list)
-
-## Installation & Testing
-
-### Add to Claude Code
+### Install Plugin
 
 ```bash
-# Add marketplace
-/plugin marketplace add tachyon-beep/skillpacks
-
-# Browse available
-/plugin
-
-# Install specific pack
-/plugin install yzmir-deep-rl
+# From this repository root
+/plugin add .
 ```
 
-### Development Testing
+### Use Plugin
 
-When testing changes to skills:
-
-1. Make edits to `plugins/[plugin-name]/skills/[skill-name]/SKILL.md`
-2. If plugin is installed, changes take effect immediately
-3. Test by asking Claude to use the skill
-
-### Local Development Installation
-
+**Via Slash Command (Recommended):**
 ```bash
-# From skillpacks directory
-/plugin marketplace add .
+/system-archaeologist
 ```
 
-## Version Management
-
-### Plugin Versioning
-
-Each plugin has independent versioning in `.claude-plugin/plugin.json`:
-
-```json
-{
-  "name": "yzmir-deep-rl",
-  "version": "1.0.0",
-  "description": "...",
-  "category": "ai-ml"
-}
+**Via Direct Skill Invocation:**
+```plaintext
+I'm using axiom/system-archaeologist/analyzing-unknown-codebases
 ```
-
-### Marketplace Versioning
-
-The marketplace catalog (`.claude-plugin/marketplace.json`) coordinates all 13 plugins:
-
-- Lists all plugins with their source paths
-- Maintains marketplace metadata (version, homepage)
-- Uses `"pluginRoot": "./plugins"` to locate plugin directories
 
 ## Working With This Repository
 
-### Adding a New Skill
+### Testing Changes
 
-1. Navigate to appropriate plugin: `plugins/[plugin-name]/skills/`
-2. Create directory: `mkdir new-skill-name`
-3. Create skill file: `new-skill-name/SKILL.md`
-4. Add YAML front matter:
+When modifying skills:
 
-   ```yaml
-   ---
-   name: new-skill-name
-   description: Brief description for skill discovery
-   ---
-   ```
+1. Edit skill files in `plugins/axiom-system-archaeologist/skills/using-system-archaeologist/`
+2. If plugin is installed, changes take effect immediately
+3. Test by invoking the slash command: `/system-archaeologist`
 
-5. Write skill content following existing skill patterns
-6. Test with Claude Code
+### Skill File Format
 
-### Creating a New Plugin
+Each skill follows this structure:
 
-1. Create directory: `plugins/new-plugin-name/`
-2. Create metadata: `plugins/new-plugin-name/.claude-plugin/plugin.json`
-3. Add skills directory: `plugins/new-plugin-name/skills/`
-4. Register in marketplace: Add entry to `.claude-plugin/marketplace.json`
-5. Update README.md with new plugin
+```markdown
+---
+name: skill-name
+description: Brief description for skill discovery
+mode: true  # Optional - indicates router skill
+---
 
-### Testing Strategy
+# Skill Title
 
-This repository uses a unique testing methodology:
-
-- **RED-GREEN-REFACTOR pattern** applied to skills (process documentation)
-- Test scenarios verify skills guide Claude correctly
-- Historical test artifacts removed in v1.0.0 cleanup
-- New tests should validate skill effectiveness in real usage
+[Skill content with examples, patterns, anti-patterns...]
+```
 
 ## Key Design Principles
 
-### Modularity
+### Mandatory Workflow Structure
+- **Workspace creation is non-negotiable** - prevents file scatter
+- Coordination plan must be written before analysis begins
+- Validation gates ensure quality output
 
-- Each plugin is independently installable
-- No cross-plugin dependencies in core functionality
-- Router skills guide users to appropriate packs
+### Subagent Coordination
+- Uses Task tool with subagent_type=Explore for thorough analysis
+- Parallel subagents for faster results on large codebases
+- Sequential subagents for smaller codebases or dependency analysis
+- Handoffs via shared documents in workspace
 
-### Faction Organization
+### Pressure Resistance
+- Skills explicitly warn against common shortcuts under pressure
+- Validation checklists prevent incomplete analysis
+- Quality gates are mandatory, not optional
 
-- **Yzmir** (AI/ML): Mathematical, systematic, optimization-focused
-- **Bravos** (Game Dev): Emergent systems, simulation, player-driven
-- **Lyra** (UX): User-centered, accessible, experience-driven
-- **Ordis** (Security): Compliance, threat modeling, defense
-- **Muna** (Documentation): Clarity, structure, maintainability
+### Professional Output
+- C4 diagrams in Mermaid format
+- Subsystem catalogs with dependency tracking
+- Architecture Decision Records (ADRs)
+- Stakeholder-ready documentation
 
-### Skill Quality Standards
+## Common Operations
 
-- Production-ready: Real implementations, not tutorials
-- Expert-level: Assumes competence, teaches mastery
-- Pattern-focused: Reusable approaches, not one-off solutions
-- Anti-pattern aware: Explicitly warns against common mistakes
+### Test the Plugin
 
-## File Manifest
+```bash
+# Install plugin
+/plugin add .
 
-**Total**: 201+ production files
+# Test slash command
+/system-archaeologist
 
-- 135 skill files (SKILL.md)
-- 15 plugin metadata files (plugin.json)
-- 1 marketplace catalog (marketplace.json)
-- Core documentation (README, LICENSE, CLAUDE.md, FACTIONS.md, CONTRIBUTING.md, LICENSE_ADDENDUM.md)
-- TDD artifacts (test scenarios, baseline results, methodology documentation)
+# Claude will guide through analysis workflow
+```
+
+### Verify Plugin Structure
+
+```bash
+# Check plugin metadata
+cat plugins/axiom-system-archaeologist/.claude-plugin/plugin.json
+
+# List all skills
+ls plugins/axiom-system-archaeologist/skills/using-system-archaeologist/
+
+# Verify slash command exists
+ls .claude/commands/system-archaeologist.md
+```
+
+### Update a Skill
+
+```bash
+# Edit skill content
+vim plugins/axiom-system-archaeologist/skills/using-system-archaeologist/SKILL.md
+
+# Changes take effect immediately if plugin is installed
+# Test with: /system-archaeologist
+```
 
 ## Git Workflow
 
 ### Branches
 
 - `main` - Production-ready code only
-- Feature branches for new skills/plugins
+- Feature branches for improvements
 
 ### Commits
 
 Use conventional commits:
 
-- `feat:` - New skills or plugins
+- `feat:` - New features or skills
 - `fix:` - Skill corrections or improvements
 - `docs:` - Documentation updates
 - `chore:` - Repository maintenance
 
-### Worktrees
-
-Repository uses git worktrees (`.worktrees/` is gitignored):
-
-```bash
-git worktree add .worktrees/feature-name -b feature-name
-```
-
-## Common Operations
-
-### Update a Skill
-
-```bash
-# Edit skill
-vim plugins/yzmir-deep-rl/skills/policy-gradient-methods/SKILL.md
-
-# Test with Claude Code (if plugin installed)
-# Changes are live immediately
-```
-
-### Check Plugin Status
-
-```bash
-# List all plugins
-ls plugins/
-
-# Count skills in a plugin
-find plugins/yzmir-deep-rl/skills -name "SKILL.md" | wc -l
-
-# View plugin metadata
-cat plugins/yzmir-deep-rl/.claude-plugin/plugin.json
-```
-
-### Validate Marketplace Structure
-
-```bash
-# Verify all plugins are registered
-cat .claude-plugin/marketplace.json | grep '"name":'
-
-# Check for missing plugin.json files
-for dir in plugins/*/; do
-  [ -f "$dir/.claude-plugin/plugin.json" ] || echo "Missing: $dir"
-done
-
-# Count total skills
-find plugins -name "SKILL.md" | wc -l  # Should be 135
-```
-
 ## Important Notes
 
-### Repository History
+### Plugin Version
 
-- v1.2.0 (2025-11-12): Added axiom-system-archaeologist plugin (5 skills for architecture analysis)
-- v1.1.0 (2025-11-10): Added axiom-python-engineering plugin (10 skills)
-- v1.0.0 (2025-10-31): Public release with 513 internal files removed
-- All removed files preserved in git history
-- Original source structure backed up in commits
+Current version: **1.0.2** (see `plugins/axiom-system-archaeologist/.claude-plugin/plugin.json`)
 
-### Skill Validation
+### Skill Characteristics
 
-- Skills have been systematically validated through RED-GREEN-REFACTOR testing
-- Historical validation artifacts removed for clean public release
-- Each skill represents tested, production-ready guidance
+- **Router skill** (`using-system-archaeologist/SKILL.md`) coordinates analysis workflow
+- **4 specialist skills** handle specific analysis tasks
+- All skills validated through systematic testing
+- Production-ready, expert-level guidance
 
 ### License
 
-CC BY-SA 4.0 (Creative Commons Attribution-ShareAlike 4.0 International) - See LICENSE for details
+CC BY-SA 4.0 (Creative Commons Attribution-ShareAlike 4.0 International)
 
-**Important**: Faction names (Axiom, Bravos, Lyra, Muna, Ordis, Yzmir) from Altered TCG are NOT covered by this license - see LICENSE_ADDENDUM.md for details
-
-### Contributing
-
-See source/CONTRIBUTING.md for contribution guidelines
+**Important**: The "Axiom" faction name from Altered TCG is NOT covered by this license - see LICENSE_ADDENDUM.md
 
 ## Quick Reference
 
 ```bash
-# Install marketplace
-/plugin marketplace add tachyon-beep/skillpacks
+# Install plugin
+/plugin add .
 
-# Count skills
-find plugins -name "SKILL.md" | wc -l
+# Use via slash command
+/system-archaeologist
 
-# List all plugins
-ls plugins/
+# Check plugin version
+grep version plugins/axiom-system-archaeologist/.claude-plugin/plugin.json
 
-# View marketplace catalog
-cat .claude-plugin/marketplace.json
-
-# Check plugin versions
-grep -r "version" plugins/*/.claude-plugin/plugin.json
+# List skills
+find plugins/axiom-system-archaeologist/skills -name "*.md" -type f
 ```
+
+## Workflow Example
+
+When a user requests codebase analysis:
+
+1. Invoke via `/system-archaeologist`
+2. Router skill loads with mandatory workflow
+3. Workspace created: `docs/arch-analysis-YYYY-MM-DD-HHMM/`
+4. Coordination plan written: `00-coordination.md`
+5. Subagents launched for exploration
+6. Documentation generated: subsystem catalogs, C4 diagrams
+7. Validation gates ensure completeness
+8. Deliverables ready for stakeholders
+
+## Anti-Patterns to Avoid
+
+❌ **Skipping workspace creation** - "I'll just create files in project root"
+- Results in scattered files, lost context, incomplete analysis
+
+❌ **Rushing validation** - "I'll skip the checklist, looks good enough"
+- Results in missing components, incomplete diagrams, stakeholder questions
+
+❌ **Direct file exploration instead of subagents** - "I'll just read a few files"
+- Results in sampling bias, missed subsystems, inaccurate architecture
+
+✅ **Correct approach**: Follow mandatory workflow, use subagents, validate output
